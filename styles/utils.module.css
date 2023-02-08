@@ -70,3 +70,11 @@
   .image {
     margin: 15px auto;
   }
+
+  .width100 {
+    width: 100%;
+  }
+
+  .center {
+    margin: 0 auto !important;
+  }

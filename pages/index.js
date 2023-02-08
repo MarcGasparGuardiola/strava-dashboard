@@ -1,9 +1,11 @@
 import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
-import Image from 'next/image';
+
 
 import { getAllActivitiesData } from '../utils/activities';
+import { tableCreator } from '../utils/tableHydrator'
+import {generateImageCover} from '../utils/generateCover'
 
 export async function getStaticProps() {
   const response = await getAllActivitiesData();
@@ -14,6 +16,8 @@ export async function getStaticProps() {
     },
   };
 }
+
+
 
 export default function Home({ dataActivities }) {
   return (
@@ -26,20 +30,15 @@ export default function Home({ dataActivities }) {
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <div className={utilStyles.gridContainer}>
-          {dataActivities.map(({ id, name }) => (
-            <div className={utilStyles.listItem} key={id}>
+          {dataActivities.map((activity) => (
+            <div className={utilStyles.listItem} key={activity.id}>
               <div className={`card ${utilStyles.grayBck}`}>
-                <Image className={utilStyles.image}
-                  priority
-                  src="/images/bike.jpg"
-                  height={144}
-                  width={144}
-                  alt=""
-                />
+                { generateImageCover(activity.sport_type) }
                 <div className="card-body">
-                  <h5 className="card-title">{name}</h5>
-                  <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" className="btn btn-primary">Go somewhere</a>
+                  <h5 className={`card-title text-center`}>{activity.name}</h5>
+                  <p className="card-text">
+                    { tableCreator(activity) }
+                  </p>
                 </div>
               </div>
             </div>
