@@ -1,41 +1,39 @@
 import Layout from '../../components/layout';
-import { getAllPostIds, getPostData } from '../../utils/posts';
+
 import Head from 'next/head';
+
+import { getActivityById, getAllActivitiesIds } from '../../utils/activities';
+
 
 export async function getStaticProps({ params }) {
     // Add the "await" keyword like this:
-    const postData = await getPostData(params.id);
+    const response = await getActivityById(params.id);
 
+    const activityData = response.body
+    console.log(activityData)
     return {
         props: {
-            postData,
+            activityData,
         },
     };
 }
 
 export async function getStaticPaths() {
-    const paths = getAllPostIds();
+    const paths = await getAllActivitiesIds();
+    console.log(paths)
     return {
         paths,
         fallback: false,
     };
 }
 
-export default function Post({ postData }) {
+export default function Post({ activityData }) {
     return (
         <Layout>
             <Head>
-                <title>{postData.title}</title>
+                <title>{activityData.name}</title>
             </Head>
-
-
-            {postData.title}
-            <br />
-            {postData.id}
-            <br />
-            {postData.date}
-            <br />
-            <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+          {activityData.name}
         </Layout>
     );
 }
